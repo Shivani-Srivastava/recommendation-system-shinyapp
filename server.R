@@ -93,7 +93,7 @@ output$ubfc_re <- DT::renderDataTable({
 output$downloadData1 <- downloadHandler(
   filename = function() { "recommendation_system_input.csv" },
   content = function(file) {
-    write.csv(read.csv("data/dtm_to_network_an.csv"), file,row.names = FALSE)
+    write.csv(read.csv("data/B2C brands pgp21_dtm.csv"), file,row.names = FALSE)
   }
 )
 
