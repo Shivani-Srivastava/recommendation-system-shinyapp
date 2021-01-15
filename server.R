@@ -68,17 +68,25 @@ output$freq_table <- renderDataTable({
 #----------IBFC Recommendation-----------
   
   output$ibfc_re <- DT::renderDataTable({
-    system.time({ CF.list = dtm2CF(dataset(), input$Id084, 12) })
-    #CF.list = dtm2CF(dataset(), input$Id084, 12)
-    ibcf.brands = CF.list[[1]]
-    DT::datatable(ibcf.brands, options = list(pageLength = 10))
+    if (is.null(input$file)) {return(NULL)}
+    else{
+      system.time({ CF.list = dtm2CF(dataset(), input$Id084, 12) })
+      #CF.list = dtm2CF(dataset(), input$Id084, 12)
+      ibcf.brands = CF.list[[1]]
+      DT::datatable(ibcf.brands, options = list(pageLength = 10))
+    }
+   
   })
   
 output$ubfc_re <- DT::renderDataTable({
-  system.time({ CF.list = dtm2CF(dataset(), input$Id084, 12) })
-  #CF.list = dtm2CF(dataset(), input$Id084, 12)
-  ibcf.brands = CF.list[[2]]
-  DT::datatable(ibcf.brands, options = list(pageLength = 10))
+  if (is.null(input$file)) {return(NULL)}
+  else{
+    system.time({ CF.list = dtm2CF(dataset(), input$Id084, 12) })
+    #CF.list = dtm2CF(dataset(), input$Id084, 12)
+    ibcf.brands = CF.list[[2]]
+    DT::datatable(ibcf.brands, options = list(pageLength = 10))
+  }
+
 })
 
 

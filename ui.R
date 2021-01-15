@@ -30,7 +30,7 @@ shinyUI(fluidPage(
                 tabPanel("Overview",h4(p("How to use this App")),
                          
                          p("", align = "justify"),
-                         p("If you wish to change the input, modify the input in left side-bar panel and click on Apply changes. Accordingly results in other tab will be refreshed
+                         p("Upload data to sidebar panel and select focal user for which recommendation is require. Once you change the user, App will automatically refresh and display recommendation for respective user.
                            ", align = "Justify"),
                          
                          #, height = 280, width = 400
