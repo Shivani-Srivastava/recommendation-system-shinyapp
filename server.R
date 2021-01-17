@@ -89,6 +89,19 @@ output$ubfc_re <- DT::renderDataTable({
 
 })
 
+output$sim_usr <- DT::renderDataTable({
+  if (is.null(input$file)) {return(NULL)}
+  else{
+    system.time({ CF.list = dtm2CF(dataset(), input$Id084, 12) })
+    #CF.list = dtm2CF(dataset(), input$Id084, 12)
+    simil.users = CF.list[[3]]
+    DT::datatable(simil.users, options = list(pageLength = 10))
+  }
+  
+})
+
+
+
 
 output$downloadData1 <- downloadHandler(
   filename = function() { "recommendation_system_input.csv" },

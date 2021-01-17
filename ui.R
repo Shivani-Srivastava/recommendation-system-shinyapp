@@ -2,6 +2,7 @@ library(quanteda)
 library(ggplot2)
 library(magrittr)
 library(text2vec)
+library(shinyWidgets)
 
 
 
@@ -65,7 +66,12 @@ shinyUI(fluidPage(
                          h4("UBFC Recommendation"),
                          DT::dataTableOutput('ubfc_re')
                          
-                )
+                ),
+               tabPanel("Similar Users",
+                        h4("Similar Users"),
+                        DT::dataTableOutput("sim_usr")
+               )
+              
                 
                 
                 
