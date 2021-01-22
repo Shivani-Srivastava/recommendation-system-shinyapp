@@ -4,3 +4,4 @@ if (!require(quanteda)) {install.packages("quanteda")};  library(quanteda)
 if (!require(ggplot2)) {install.packages("ggplot2")};  library(ggplot2)
 if (!require(magrittr)) {install.packages("magrittr")};  library(magrittr)
 if (!require(text2vec)) {install.packages("text2vec")};  library(text2vec)
+
