@@ -20,7 +20,7 @@ shinyUI(fluidPage(
   # Input in sidepanel:
   sidebarPanel(
     
-    fileInput("file", "Upload Input file"),
+    fileInput("file", "Upload Input DTM file"),
     uiOutput("focal_list"),
   ),
   
@@ -77,7 +77,7 @@ shinyUI(fluidPage(
                          DT::dataTableOutput('ubfc_re')
                          
                 ),
-               tabPanel("Similar Uers",
+               tabPanel("Similar Users",
                         h4("Similar Users"),
                         DT::dataTableOutput("sim_usr")
                )
