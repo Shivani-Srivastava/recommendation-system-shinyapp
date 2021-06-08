@@ -63,6 +63,8 @@ shinyUI(fluidPage(
                          verbatimTextOutput("dim"),
                          br(),
                          h4("Sample Dataset"),
+                         dataTableOutput("samp_data"),
+                         h4("Sample DTM"),
                          dataTableOutput("dtm_head"),
                          br(),
                          h4("Word Frequency Table"),

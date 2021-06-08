@@ -11,6 +11,11 @@ dataset1 <- reactive({
       }
   })
 
+output$samp_data <- renderDataTable({
+  req(input$file)
+  head(dataset1(),10)
+})
+
 dataset <- reactive({
   req(input$file)
   if(!input$adj){
@@ -24,7 +29,7 @@ dataset <- reactive({
   }
     
     df0 = data.frame(user_id, item_id, rating)
-    adja_matrix = convert_longform(longform_inp)
+    adja_matrix = convert_longform(df0)
     adja_matrix <- as.data.frame(adja_matrix)
     rownames(adja_matrix) = adja_matrix[,1]
     adja_matrix = adja_matrix[,2:ncol(adja_matrix)]
