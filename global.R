@@ -55,3 +55,12 @@ dtm2CF <- function(dtm, focal.user, n0){
   
 } # func ends
 
+
+convert_longform <- function(df0){
+  
+  a1 = df0 %>% pivot_wider(id_cols = user_id, 
+                           names_from = item_id, 
+                           values_from = rating, 
+                           values_fill = 0)
+  
+  return(a1) } # func ends

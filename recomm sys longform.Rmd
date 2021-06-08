@@ -1,0 +1,100 @@
+---
+title: "RecommSys longDF Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+The Recommendation Systems wala app already exists that provides (a) IBCF, (b) UBCF and (c) User similarity scores, all based off of a adjacency matrix.
+
+However, the adjacency matrix wala input requirement may just be a tad too restrictive. 
+
+After all, in real life, most datasets we see are in classical *long form*, i.e. with users and items as columns with duplicates in either column allowed. 
+
+Below is a function that takes such long form input and transforms it into *wide form* data - like the adjacency matrix - such that the present recomm sys app can read and process directly.
+
+### Long Form Data example
+
+Here's an example of long form data from Kaggle for a movies recomm system.
+
+```{r data_load}
+
+movies_reco_long = read.csv("movies_recomm_longform.csv")
+dim(movies_reco_long)
+head(movies_reco_long)
+```
+
+Notice the  dataset format and size.
+
+All one needs for the recomm app are 2 (OK, 3) things, as below:
+
+* a `user ID` column that tracks a user's prefs or purchases over time
+
+* an `item ID` column that details what was preferred (movies, books, SKUs etc)
+
+* a `rating` column (optional) in which users rated purchases. If this colm doesn;t exist, we'll create a colm of ones to track purchase incidence and use it instead.
+
+For any long-form dataset input, user must specify the above 3 things via UI elements. 3 variable selection fields (drop-downs or click-choose) - one for each of the three. 
+
+Note: In the `rating` field, give option of `NA` so that we can create a ones column instead if rating is unavailable.
+
+Now we are ready to process the rest.
+
+Behold.
+
+```{r ui_inputs}
+require(tidyverse)
+
+df = movies_reco_long  # comes from fileInput in UI
+user_id = df$user_id  # from UI, variable selection
+item_id = df$item_id  # from UI, variable selection
+rating = df$rating # from UI. Either rating colm exists or is NA
+
+if (is.na(rating)) {
+  rating = rep(1, length(user_id))
+}
+
+df0 = data.frame(user_id, item_id, rating)  # this goes to server.R as input
+```
+
+# Func to process longform
+
+Time to code the func itself. Will use `dplyr` and `tidyr` functionality. Behold.
+
+```{r func_def}
+
+convert_longform <- function(df0){
+  
+  a1 = df0 %>% pivot_wider(id_cols = user_id, 
+                names_from = item_id, 
+                values_from = rating, 
+                values_fill = 0)
+  
+  return(a1) } # func ends
+
+```
+
+Now can save the above and read-into recomm sys app as adjacency or wide-form matrix.
+
+### Test-driving 
+
+tidyverse is blazingly fast, takes <1 sec, even for the 100k obs in this logform dataset.
+
+```{r test_drive}
+
+longform_inp = movies_reco_long[,c("user_id", "item_id", "rating")]
+
+system.time({
+  adja_matrix = convert_longform(longform_inp)
+})
+
+dim(adja_matrix)
+```
+
+And now this `adja_matrix` object is ready to be processed as usual in the recomm sys app.
+
+Note: Will need to add a check-box for user tospecify if input data is long-form or not. 
+
+User can that way have option to directly upload adjacency matices (such as DTMs fom text apps).
+
+Sudhir, June 2021

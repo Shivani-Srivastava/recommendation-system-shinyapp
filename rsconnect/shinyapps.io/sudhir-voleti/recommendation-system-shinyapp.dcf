@@ -1,0 +1,12 @@
+name: recommendation-system-shinyapp
+title: recommendation-system-shinyapp
+username:
+account: sudhir-voleti
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3505617
+bundleId: 4135639
+url: https://sudhir-voleti.shinyapps.io/recommendation-system-shinyapp/
+when: 1611474857.33327
+asMultiple: FALSE
+asStatic: FALSE

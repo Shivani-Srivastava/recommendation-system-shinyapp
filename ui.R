@@ -7,28 +7,30 @@ library(shinyWidgets)
 
 
 
-
-
-
-
-
-
 shinyUI(fluidPage(
-  
+  title = "Recommendation System",
   titlePanel(title=div(img(src="logo.png",align='right'),"Recommendation System")),
   
   # Input in sidepanel:
   sidebarPanel(
     
+    conditionalPanel(condition="input.tabselected==1",
     fileInput("file", "Upload Input DTM file"),
-    uiOutput("focal_list"),
+    checkboxInput("adj","Adjaceny matrix uploaded",FALSE),
+    uiOutput("user_ui"),
+    uiOutput("item_ui"),
+    uiOutput("rating_ui")
+    ),
+    conditionalPanel(condition="input.tabselected==2",
+                     uiOutput("focal_list"),
+                     )
   ),
   
   # Main Panel:
   mainPanel( 
     tabsetPanel(type = "tabs",
                 #
-                tabPanel("Overview & Example Dataset",
+                tabPanel("Overview & Example Dataset",value=1,
                          
                          h4(p("Overview")),
                          p("A recommender system, or a recommendation system, is a subclass of information filtering system that seeks to predict the 'rating' or 'preference' a user would give to an item.
@@ -56,7 +58,7 @@ shinyUI(fluidPage(
                 )  ,
             
                 
-                tabPanel("DTM Descriptive", 
+                tabPanel("DTM Descriptive", value=2,
                          h4("Summary Report"),
                          verbatimTextOutput("dim"),
                          br(),
@@ -67,23 +69,20 @@ shinyUI(fluidPage(
                          dataTableOutput("freq_table")
                          
                          ),
-                tabPanel("IBCF Recommendation",
+                tabPanel("IBCF Recommendation",value=2,
                         h4("Item-based collaborative filtering (IBCF)"),
                         DT::dataTableOutput('ibfc_re')
                          
                 ),
-                tabPanel("UBCF Recommendation",
+                tabPanel("UBCF Recommendation",value=2,
                          h4("User-based collaborative filtering (UBCF)"),
                          DT::dataTableOutput('ubfc_re')
                          
                 ),
-               tabPanel("Similar Users",
+               tabPanel("Similar Users",value=2,
                         h4("Similar Users"),
                         DT::dataTableOutput("sim_usr")
-               )
-              
-                
-                
+               ),id = "tabselected"
                 
                 
     )

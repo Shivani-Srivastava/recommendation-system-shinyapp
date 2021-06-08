@@ -1,6 +1,6 @@
 dtm <- read.csv("c://Users/31202/Downloads/B2C brands pgp21 _bigram_corpus (3) _dtm.csv",header = TRUE)
 
-dtm <- read.csv("data/dtm_to_network_an.csv",header = TRUE)
+dtm <- read.csv("data/B2C brands pgp21_dtm.csv",header = TRUE)
 
 ## basic pre-proc
 rownames(dtm) = dtm[,1]
@@ -33,3 +33,9 @@ token_freqs$word = rownames(token_freqs)
 # reorder by column name
 token_freqs <- token_freqs[c("word", "freq")]  #return(as.data.frame(head(token_freqs, 10))) # 2nd output. Sorted freqs
 head(token_freqs,10)
+
+
+adja_matrix <- as.data.frame(adja_matrix)
+rownames(adja_matrix) = adja_matrix[,1]
+adja_matrix = adja_matrix[,2:ncol(adja_matrix)]
+

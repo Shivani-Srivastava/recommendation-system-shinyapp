@@ -1,19 +1,88 @@
-shinyServer(function(input, output,session) {
-  
-  
+options(shiny.maxRequestSize=15*1024^2)
 
-  
+shinyServer(function(input, output,session) {
+
 #-------Data Upload---------
-dataset <- reactive({
+dataset1 <- reactive({
     if (is.null(input$file)) {return(NULL)}
     else {
       Document = read.csv(input$file$datapath,header = TRUE)
-      rownames(Document) = Document[,1]
-      Document = Document[,2:ncol(Document)]
       return(Document)
       }
   })
+
+dataset <- reactive({
+  req(input$file)
+  if(!input$adj){
+    df = dataset1()  # comes from fileInput in UI
+    user_id = df[,input$uid]  # from UI, variable selection
+    item_id = df[,input$iid]  # from UI, variable selection
+  if (input$rat_id=="NA") {
+     rating = rep(1, length(user_id))
+  }else{
+    rating = df[,input$rat_id] # from UI. Either rating colm exists or is NA
+  }
+    
+    df0 = data.frame(user_id, item_id, rating)
+    adja_matrix = convert_longform(longform_inp)
+    adja_matrix <- as.data.frame(adja_matrix)
+    rownames(adja_matrix) = adja_matrix[,1]
+    adja_matrix = adja_matrix[,2:ncol(adja_matrix)]
+    return(adja_matrix)
+    
+  }else{
+    
+    dataset <- dataset1()
+    rownames(dataset) = dataset[,1]
+    dataset = dataset[,2:ncol(dataset)]
+    return(dataset)
+  }
   
+})
+
+# displaying option to select UID and Item Id #
+
+cols <- reactive({colnames(dataset1())})
+
+output$user_ui <- renderUI({
+  if(input$adj){
+    return(NULL)
+  }else{
+    selectInput("uid","Select User ID",choices = cols(),multiple = FALSE)
+  }
+})
+
+item_cols <- reactive({
+  x <- match(input$uid,cols())
+  item <- cols()[-x]
+  return(item)
+})
+
+output$item_ui <- renderUI({
+  if(input$adj){
+    return(NULL)
+  }else{
+    selectInput("iid","Select Item ID",choices = item_cols(),multiple = FALSE)
+  }
+})
+
+ratings_cols <- reactive({
+  remove <- c(input$uid,input$iid)
+  ratings <- cols()[!cols() %in% remove]
+  if(length(ratings)==0){
+    ratings <- NA
+  }
+  return(ratings)
+})
+
+output$rating_ui <- renderUI({
+  if(input$adj){
+    return(NULL)
+  }else{
+    selectInput("rat_id","Select Rating ID",choices = c(ratings_cols(),"NA"),multiple = FALSE)
+  }
+})
+
 #----Selecting Focal User-------  
 output$focal_list <- renderUI({
   if (is.null(input$file)) {return(NULL)}
