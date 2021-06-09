@@ -46,11 +46,7 @@ output$samp_data <- renderDataTable({
 #   }
 # })
 
-
-
-
-
-dataset <- reactive({
+dataset <- eventReactive(input$cr_adj,{
   req(input$file)
   if(!input$adj){
     df = dataset1()  # comes from fileInput in UI
@@ -192,10 +188,15 @@ output$freq_table <- renderDataTable({
   output$ibfc_re <- DT::renderDataTable({
     if (is.null(input$file)) {return(NULL)}
     else{
-      system.time({ CF.list = dtm2CF(dataset(), input$Id084, 12) })
+      progress <- Progress$new(session, min=1, max=10)
+      progress$set(value=4,paste0("Calculating IBFC recommendation for focal user ",input$Id084))
+      CF.list = dtm2CF(dataset(), input$Id084, 12)
+      progress$set(value=8,"Done")
+      on.exit(progress$close())
       #CF.list = dtm2CF(dataset(), input$Id084, 12)
       ibcf.brands = CF.list[[1]]
       DT::datatable(ibcf.brands, options = list(pageLength = 10))
+     
     }
    
   })
@@ -203,7 +204,11 @@ output$freq_table <- renderDataTable({
 output$ubfc_re <- DT::renderDataTable({
   if (is.null(input$file)) {return(NULL)}
   else{
-    system.time({ CF.list = dtm2CF(dataset(), input$Id084, 12) })
+    progress <- Progress$new(session, min=1, max=10)
+    progress$set(value=4,paste0("Calculating UBFC recommendation for focal user ",input$Id084))
+    CF.list = dtm2CF(dataset(), input$Id084, 12)
+    progress$set(value=8,"Done")
+    on.exit(progress$close())
     #CF.list = dtm2CF(dataset(), input$Id084, 12)
     ibcf.brands = CF.list[[2]]
     DT::datatable(ibcf.brands, options = list(pageLength = 10))
@@ -214,7 +219,11 @@ output$ubfc_re <- DT::renderDataTable({
 output$sim_usr <- DT::renderDataTable({
   if (is.null(input$file)) {return(NULL)}
   else{
-    system.time({ CF.list = dtm2CF(dataset(), input$Id084, 12) })
+    progress <- Progress$new(session, min=1, max=10)
+    progress$set(value=4,paste0("Finding similar user for focal user ",input$Id084))
+    CF.list = dtm2CF(dataset(), input$Id084, 12)
+    progress$set(value=8,"Done")
+    on.exit(progress$close())
     #CF.list = dtm2CF(dataset(), input$Id084, 12)
     simil.users = CF.list[[3]]
     DT::datatable(simil.users, options = list(pageLength = 10))

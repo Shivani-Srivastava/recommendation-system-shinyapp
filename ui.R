@@ -22,8 +22,8 @@ shinyUI(fluidPage(
                      checkboxInput("adj","Check if adjaceny matrix uploaded",FALSE),
                      uiOutput("user_ui"),
                      uiOutput("item_ui"),
-                     uiOutput("rating_ui")
-                    # uiOutput('adj_btn')
+                     uiOutput("rating_ui"),
+                     actionButton("cr_adj","Upload/Create Adjacency Matrix")
                      ),
     conditionalPanel(condition = "input.tabselected==3",
                      uiOutput("focal_list")
