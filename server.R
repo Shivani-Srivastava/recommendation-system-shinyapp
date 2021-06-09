@@ -11,10 +11,29 @@ dataset1 <- reactive({
       }
   })
 
+output$xyz <- renderUI({
+  if(input$adj){
+    return(NULL)
+  }else{
+    h4("Sample Adjaceny")
+  }
+})
 output$samp_data <- renderDataTable({
   req(input$file)
   head(dataset1(),10)
 })
+
+# output$adj_btn <- renderUI({
+#   if(input$adj){
+#     return(NULL)
+#   }else{
+#     actionButton("cr_adj","Create Adjacency Matrix")
+#   }
+# })
+
+
+
+
 
 dataset <- reactive({
   req(input$file)
@@ -29,6 +48,8 @@ dataset <- reactive({
   }
     
     df0 = data.frame(user_id, item_id, rating)
+    df_dups <- df0[c("user_id", "item_id")]
+    df0 <- df0[!duplicated(df_dups),]
     adja_matrix = convert_longform(df0)
     adja_matrix <- as.data.frame(adja_matrix)
     rownames(adja_matrix) = adja_matrix[,1]
@@ -94,11 +115,11 @@ output$focal_list <- renderUI({
   else{
     
     users_list <- rownames(dataset())
-    pickerInput(
+    selectInput(
       inputId = "Id084",
       label = "Select Focal User", 
-      choices = users_list,
-      options = list(`live-search` = TRUE)
+      choices = users_list#,
+     # options = list(`live-search` = TRUE)
     )
   }
 })
@@ -108,8 +129,14 @@ output$focal_list <- renderUI({
 output$dim <- renderText({
   if (is.null(input$file)) {return(NULL)}
   else{
-    size <- dim(dataset())
-    return(paste0("Uploaded Dataset has ",size[1]," (rows) "," X ",size[2]," (columns)"))
+    if(input$adj){
+      size <- dim(dataset())
+      return(paste0("Uploaded Adjaceny Matrix has ",size[1]," (rows) "," X ",size[2]," (columns)"))
+    }else{
+      size <- dim(dataset1())
+      return(paste0("Uploaded Dataset has ",size[1]," (rows) "," X ",size[2]," (columns)"))
+    }
+    
   }
   
   
@@ -117,7 +144,13 @@ output$dim <- renderText({
   
 
 output$dtm_head <- renderDataTable({
-  return(dataset()[1:10,1:10])
+  req(dataset())
+  if(input$adj){
+    return(NULL)
+  }else{
+    return(dataset()[1:10,1:10])
+  }
+  
 })
 
 

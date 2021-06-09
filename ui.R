@@ -15,14 +15,18 @@ shinyUI(fluidPage(
   sidebarPanel(
     
     conditionalPanel(condition="input.tabselected==1",
-    fileInput("file", "Upload Input DTM file"),
-    checkboxInput("adj","Adjaceny matrix uploaded",FALSE),
-    uiOutput("user_ui"),
-    uiOutput("item_ui"),
-    uiOutput("rating_ui")
+    fileInput("file", "Upload Input file")
+ 
     ),
     conditionalPanel(condition="input.tabselected==2",
-                     uiOutput("focal_list"),
+                     checkboxInput("adj","Check if adjaceny matrix uploaded",FALSE),
+                     uiOutput("user_ui"),
+                     uiOutput("item_ui"),
+                     uiOutput("rating_ui")
+                    # uiOutput('adj_btn')
+                     ),
+    conditionalPanel(condition = "input.tabselected==3",
+                     uiOutput("focal_list")
                      )
   ),
   
@@ -43,9 +47,11 @@ shinyUI(fluidPage(
                          p("Upload data to sidebar panel and select focal user for which recommendation is require. Once you change the user, App will automatically refresh and display recommendation for respective user in different output tabs.
                            ", align = "Justify"),
                          h4(p("Input Data Format")),
-                         p("Application takes DTM (Document Term Matrix) as an input. Below is the example
+                         p("Application takes either of two different type of inputs. One is Adjacency Matrix as shown below
                            ", align = "Justify"),
                          img(src = "dataset.png"),
+                         p("Also, App can take long format dataset. As shown below"),
+                         img(src = "long.png"),
                          hr(),
                          h4(p("Download Sample text file")),
                          
@@ -58,30 +64,31 @@ shinyUI(fluidPage(
                 )  ,
             
                 
-                tabPanel("DTM Descriptive", value=2,
+                tabPanel("Data Summary", value=2,
                          h4("Summary Report"),
                          verbatimTextOutput("dim"),
-                         br(),
+                         hr(),
                          h4("Sample Dataset"),
                          dataTableOutput("samp_data"),
-                         h4("Sample DTM"),
+                         hr(),
+                         uiOutput("xyz"),
                          dataTableOutput("dtm_head"),
-                         br(),
+                         hr(),
                          h4("Word Frequency Table"),
                          dataTableOutput("freq_table")
                          
                          ),
-                tabPanel("IBCF Recommendation",value=2,
+                tabPanel("IBCF Recommendation",value=3,
                         h4("Item-based collaborative filtering (IBCF)"),
                         DT::dataTableOutput('ibfc_re')
                          
                 ),
-                tabPanel("UBCF Recommendation",value=2,
+                tabPanel("UBCF Recommendation",value=3,
                          h4("User-based collaborative filtering (UBCF)"),
                          DT::dataTableOutput('ubfc_re')
                          
                 ),
-               tabPanel("Similar Users",value=2,
+               tabPanel("Similar Users",value=3,
                         h4("Similar Users"),
                         DT::dataTableOutput("sim_usr")
                ),id = "tabselected"

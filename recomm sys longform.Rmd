@@ -47,14 +47,16 @@ require(tidyverse)
 
 df = movies_reco_long  # comes from fileInput in UI
 user_id = df$user_id  # from UI, variable selection
-item_id = df$item_id  # from UI, variable selection
+item_id = df$title  # from UI, variable selection
 rating = df$rating # from UI. Either rating colm exists or is NA
 
 if (is.na(rating)) {
   rating = rep(1, length(user_id))
 }
 
-df0 = data.frame(user_id, item_id, rating)  # this goes to server.R as input
+df0 = data.frame(user_id, item_id, rating)
+df_dups <- df0[c("user_id", "item_id")]# this goes to server.R as input
+df0 <- df0[!duplicated(df_dups),]
 ```
 
 # Func to process longform
@@ -82,10 +84,10 @@ tidyverse is blazingly fast, takes <1 sec, even for the 100k obs in this logform
 
 ```{r test_drive}
 
-longform_inp = movies_reco_long[,c("user_id", "item_id", "rating")]
+longform_inp = movies_reco_long[,c("user_id", "title", "rating")]
 
 system.time({
-  adja_matrix = convert_longform(longform_inp)
+  adja_matrix = convert_longform(df0)
 })
 
 dim(adja_matrix)
