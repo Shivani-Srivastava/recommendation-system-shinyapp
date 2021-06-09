@@ -11,6 +11,21 @@ dataset1 <- reactive({
       }
   })
 
+
+output$pqr <- renderUI({
+    if(input$adj){
+      return(NULL)
+    }else{
+      verbatimTextOutput("dtm_sz")
+    }
+  })
+
+output$dtm_sz <- renderText({
+  size <- dim(dataset())
+  paste0("Adjaceny Matrix has ",size[1]," (rows) "," X ",size[2]," (columns)")
+})  
+  
+
 output$xyz <- renderUI({
   if(input$adj){
     return(NULL)

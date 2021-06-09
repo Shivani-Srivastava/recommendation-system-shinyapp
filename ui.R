@@ -72,6 +72,7 @@ shinyUI(fluidPage(
                          dataTableOutput("samp_data"),
                          hr(),
                          uiOutput("xyz"),
+                         uiOutput("pqr"),
                          dataTableOutput("dtm_head"),
                          hr(),
                          h4("Word Frequency Table"),
