@@ -5,4 +5,5 @@ if (!require(ggplot2)) {install.packages("ggplot2")};  library(ggplot2)
 if (!require(magrittr)) {install.packages("magrittr")};  library(magrittr)
 if (!require(text2vec)) {install.packages("text2vec")};  library(text2vec)
 if (!require(tidyverse)) {install.packages("tidyverse")};  library(tidyverse)
+if (!require(DT)) {install.packages("DT")};  library(DT)
 
