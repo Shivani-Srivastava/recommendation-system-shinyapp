@@ -43,6 +43,8 @@ shinyUI(fluidPage(
                                 "-Wikipedia"),
                          hr(),
                          h4(p("How to use this App")),
+                         a(href="https://www.youtube.com/watch?v=_u9glAZn54A","Youtube Link for App Navigation"),
+
                          p("", align = "justify"),
                          p("Upload data to sidebar panel and select focal user for which recommendation is require. Once you change the user, App will automatically refresh and display recommendation for respective user in different output tabs.
                            ", align = "Justify"),
